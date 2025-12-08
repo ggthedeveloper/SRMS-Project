@@ -1,4 +1,5 @@
 # Student Record Management System 
+Live Demo: https://ggthedeveloper.github.io/SRMS-Project/
 A fully interactive **Student Record Management System (SRMS)** built using **HTML**, **Tailwind CSS**, **JavaScript**, and modern UI components.  
 This portal allows administrators to manage student records, calculate CGPA, manage courses, view analytics, and export data — all with a clean dashboard interface.
 
