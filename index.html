@@ -6,6 +6,13 @@
     <title>SRM AP Student Portal</title>
 
     <!-- Tailwind CSS -->
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <script>
+    tailwind.config = {
+        darkMode: 'class'
+    }
+    </script>
+    
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Lucide Icons -->
@@ -84,7 +91,116 @@
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
-
+/* ================= DARK MODE ================= */
+.dark body{
+    background:#020617;
+    color:#e2e8f0;
+}
+/* Main backgrounds */
+.dark .bg-white{
+    background:#0f172a !important;
+}
+.dark .bg-slate-50{
+    background:#020617 !important;
+}
+.dark .bg-slate-100{
+    background:#111827 !important;
+}
+/* Text colors */
+.dark .text-slate-800{
+    color:#f8fafc !important;
+}
+.dark .text-slate-700{
+    color:#e2e8f0 !important;
+}
+.dark .text-slate-600{
+    color:#cbd5e1 !important;
+}
+.dark .text-slate-500{
+    color:#94a3b8 !important;
+}
+.dark .text-slate-400{
+    color:#64748b !important;
+}
+/* Borders */
+.dark .border-slate-100,
+.dark .border-slate-200,
+.dark .border-slate-300{
+    border-color:#1e293b !important;
+}
+/* Inputs */
+.dark input,
+.dark select,
+.dark textarea{
+    background:#111827 !important;
+    color:#f8fafc !important;
+    border-color:#334155 !important;
+}
+.dark input::placeholder,
+.dark textarea::placeholder{
+    color:#64748b !important;
+}
+/* Tables */
+.dark table{
+    color:#e2e8f0;
+}
+.dark thead{
+    background:#111827 !important;
+}
+.dark tbody tr:hover{
+    background:#0f172a !important;
+}
+/* Modal */
+.dark #studentModal .bg-white,
+.dark #courseModal .bg-white,
+.dark #registerModal .bg-white{
+    background:#0f172a !important;
+}
+/* Sidebar */
+.dark #sidebar{
+    background:#020617 !important;
+}
+/* Cards */
+.dark .shadow-sm,
+.dark .shadow-xl,
+.dark .shadow-2xl{
+    box-shadow:none !important;
+}
+/* Buttons */
+.dark .bg-blue-50{
+    background:#172554 !important;
+}
+.dark .bg-emerald-50{
+    background:#052e16 !important;
+}
+.dark .bg-indigo-50{
+    background:#1e1b4b !important;
+}
+.dark .bg-amber-50{
+    background:#451a03 !important;
+}
+.dark .hover\:bg-slate-100:hover{
+    background:#1e293b !important;
+}
+.dark .hover\:bg-slate-200:hover{
+    background:#334155 !important;
+}
+/* Captcha */
+.dark .captcha-box{
+    background-color:#0f172a;
+    color:#cbd5e1;
+    border-color:#334155;
+}
+/* Scrollbar */
+.dark ::-webkit-scrollbar-track{
+    background:#0f172a;
+}
+.dark ::-webkit-scrollbar-thumb{
+    background:#334155;
+}
+.dark ::-webkit-scrollbar-thumb:hover{
+    background:#475569;
+}
 </style>
 </head>
 <body class="bg-slate-50 text-slate-800 h-screen overflow-hidden">
@@ -247,7 +363,18 @@
                     </button>
                 </div>
 
-                <div class="flex items-center gap-4 ml-auto">
+                <!-- <div class="flex items-center gap-4 ml-auto"> -->
+                <div class="flex items-center gap-3 ml-auto">
+
+                <!-- Dark Mode Toggle -->
+                <button 
+                    onclick="toggleDarkMode()"
+                    id="darkModeBtn"
+                    class="p-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 transition-colors">
+            
+                    <i data-lucide="moon" class="w-5 h-5 text-slate-700"></i>
+                </button>
+                    
                     <div class="text-right hidden sm:block">
                         <span class="text-sm font-medium text-slate-800 block" id="headerAdminName">Admin User</span>
                         <span class="text-xs text-slate-500 block" id="headerAdminId">Administrator</span>
@@ -734,19 +861,15 @@
         }
 
         // --- Registration Logic ---
-        
         function openRegisterModal() {
             document.getElementById('registerModal').classList.remove('hidden');
             lucide.createIcons();
         }
-        
         function closeRegisterModal() {
             document.getElementById('registerModal').classList.add('hidden');
         }
-        
         function handleRegister(e) {
             e.preventDefault();
-        
             const name = document.getElementById('registerName').value;
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
@@ -761,7 +884,6 @@
                 alert("User already exists with this email.");
                 return;
             }
-        
             users.push({
                 name,
                 email,
@@ -778,7 +900,7 @@
             document.getElementById('loginName').value = name;
             document.getElementById('loginPassword').value = password;
         }
-        
+
         // --- Login Logic ---
         function generateCaptcha() {
             const chars = "ABCDEFGHJKMNPQRSTUVWXYZ0123456789"; 
@@ -826,6 +948,42 @@
             lucide.createIcons();
         }
 
+        // --- DARK MODE LOGIC ---
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        
+            const isDark = document.documentElement.classList.contains('dark');
+        
+            localStorage.setItem('srms_dark_mode', isDark);
+        
+            updateDarkModeIcon();
+        }
+        
+        function updateDarkModeIcon() {
+            const btn = document.getElementById('darkModeBtn');
+        
+            if (!btn) return;
+        
+            const isDark = document.documentElement.classList.contains('dark');
+        
+            btn.innerHTML = isDark
+                ? '<i data-lucide="sun" class="w-5 h-5 text-yellow-400"></i>'
+                : '<i data-lucide="moon" class="w-5 h-5 text-slate-700"></i>';
+        
+            lucide.createIcons();
+        }
+        
+        function loadDarkMode() {
+            const saved = localStorage.getItem('srms_dark_mode');
+        
+            if (saved === 'true') {
+                document.documentElement.classList.add('dark');
+            }
+        
+            updateDarkModeIcon();
+        }
+        
         // --- Admin Setup Logic ---
         function previewAdminPhoto(input) {
             if(input.files && input.files[0]) {
@@ -1481,6 +1639,7 @@
         generateCaptcha();
         generateSectionOptions();
         lucide.createIcons();
+        loadDarkMode();
 
         // Render empty stats/charts initially
         renderStudents();
